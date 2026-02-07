@@ -164,103 +164,109 @@ spring.flyway.enabled=true
 
 The application will start on `http://localhost:8080`.
 
+## Bruno Collection
+
+A [Bruno](https://www.usebruno.com/) collection is available in the `bruno/` directory to help you test the API endpoints easily.
+
+1.  Open the Bruno app.
+2.  Click **Open Collection** and select the `bruno` folder in this project.
+3.  Select the **Development** environment.
+4.  Start with `Auth -> Register` and then `Auth -> Login` to automatically set the `token` variable for subsequent requests.
+
+For more details, see [bruno/README.md](bruno/README.md).
+
 ## API Endpoints
 
 ### Authentication (/auth)
 
-* **POST /auth/register/userDetailsService:** Register a new user.
+* **POST /auth/sign:** Register a new user.
 
   ```json
   {
-  "email": "user@example.com",
-  "fullName": "User Name",
-  "password": "password"
+    "email": "user@example.com",
+    "fullName": "User Name",
+    "password": "password"
   }
-    ```
+  ```
 
-* **POST /auth/login:** User login.
+* **POST /auth/login:** User login. Returns a JWT token.
 
   ```json
   {
-  "email": "user@example.com",
-  "password": "password"
+    "email": "user@example.com",
+    "password": "password"
   }
-    ```
+  ```
 
-* **GET /auth/hello:** Test endpoint.
+### Shopping Lists (/lists)
 
-### Shopping Lists (/shopplists)
-
-* **GET /shopplists:** Get all shopping lists.
-* **POST /shopplists:** Create a new shopping list.
+* **GET /lists:** Get all shopping lists.
+* **POST /lists:** Create a new shopping list.
 
   ```json
   {
-  "name": "My Shopping List",
-  "owner": { "id": 1 }
+    "name": "My Shopping List",
+    "idUser": 1
   }
-    ```
+  ```
 
-* **DELETE /shopplists/{id}:** Delete a shopping list by ID.
-* **PUT /shopplists/{id}:** Update a shopping list.
+* **GET /lists/{id}:** Get a shopping list by ID.
+* **DELETE /lists/{id}:** Delete a shopping list by ID.
+* **PUT /lists/{id}:** Update a shopping list (name only).
 
   ```json
   {
-  "id": 1,
-  "name": "Updated Shopping List",
-  "owner": { "id": 1 }
+    "name": "Updated Shopping List"
   }
-    ```
+  ```
 
-### Shopping List Items (/shopplist/{shopplistId}/items)
+### Shopping List Items (/lists/{listId}/items)
 
-* **GET /shopplist/{shopplistId}/items:** Get all items for a specific shopping list.
-* **GET /shopplist/{shopplistId}/items/{id}:** Get a specific item for a specific shopping list.
-* **POST /shopplist/{shopplistId}/items:** Add an item to a shopping list.
+* **GET /lists/{listId}/items:** Get all items for a specific shopping list.
+* **GET /lists/{listId}/items/{id}:** Get a specific item within a shopping list.
+* **POST /lists/{listId}/items:** Add an item to a shopping list.
 
   ```json
   {
-  "item": { "id": 1 },
-  "quantity": 2,
-  "shoppList": { "id": 1 }
+    "listId": 1,
+    "itemId": 1,
+    "quantity": 2
   }
-    ```
+  ```
 
-* **DELETE /shopplist/{shopplistId}/items/{id}:** Delete an item from a shopping list.
-* **PUT /shopplist/{shopplistId}/items/{id}:** Update an item in a shopping list.
+* **DELETE /lists/{listId}/items/{id}:** Delete an item from a shopping list.
+* **PUT /lists/{listId}/items/{id}:** Update an item's quantity or purchased status.
 
   ```json
   {
-  "id": 1,
-  "item": { "id": 1 },
-  "quantity": 3,
-  "shoppList": { "id": 1 }
+    "listId": 1,
+    "itemId": 1,
+    "quantity": 3,
+    "purchased": true
   }
-    ```
+  ```
 
-### Shopping List User Permissions (/shopplist/{shopplistId}/permissions)
+### Shopping List User Permissions (/lists/{listId}/permissions)
 
-* **GET /shopplist/{shopplistId}/permissions:** Get all permissions for a specific shopping list.
-* **GET /shopplist/{shopplistId}/permissions/{id}:** Get a specific permission for a specific shopping list.
-* **POST /shopplist/{shopplistId}/permissions:** Add a user permission to a shopping list.
+* **GET /lists/{listId}/permissions:** Get all permissions for a specific shopping list.
+* **POST /lists/{listId}/permissions:** Grant a user permission to a shopping list.
 
   ```json
   {
-  "user": { "id": 1 },
-  "shoppList": { "id": 1 }
+    "idList": 1,
+    "idUser": 2,
+    "permission": "WRITE"
   }
-    ```
+  ```
 
-* **DELETE /shopplist/{shopplistId}/permissions/{id}:** Delete a user permission from a shopping list.
-* **PUT /shopplist/{shopplistId}/permissions/{id}:** Update a user permission in a shopping list.
+* **DELETE /lists/{listId}/permissions/{id}:** Revoke a user permission.
+* **PUT /lists/{listId}/permissions/{id}:** Update a user permission.
 
   ```json
   {
-  "id": 1,
-  "user": { "id": 1 },
-  "shoppList": { "id": 1 }
+    "permission": "READ"
   }
-    ```
+  ```
 
 ### Categories (/category)
 
@@ -269,19 +275,18 @@ The application will start on `http://localhost:8080`.
 
   ```json
   {
-  "name": "Category Name"
+    "name": "Category Name"
   }
-    ```
+  ```
 
 * **DELETE /category/{id}:** Delete a category by ID.
-* **PUT /category:** Update a category.
+* **PUT /category/{id}:** Update a category name.
 
   ```json
   {
-  "id": 1,
-  "name": "Category Name"
+    "name": "Updated Category Name"
   }
-    ```
+  ```
 
 ### Units (/unit)
 
@@ -290,49 +295,53 @@ The application will start on `http://localhost:8080`.
 
   ```json
   {
-  "name": "Unit Name",
-  "symbol": "un"
+    "name": "Unit Name",
+    "abbreviation": "un"
   }
-    ```
+  ```
 
 * **DELETE /unit/{id}:** Delete a unit by ID.
-* **PUT /unit:** Update a unit.
+* **PUT /unit:** Update a unit (requires ID in body).
 
   ```json
   {
-  "id": 1,
-  "name": "Unit Name",
-  "symbol": "un"
+    "id": 1,
+    "name": "Unit Name",
+    "abbreviation": "un"
   }
-    ```
+  ```
 
 ### Items (/item)
 
 * **GET /item:** Get all items.
+* **GET /item/{id}:** Get an item by ID.
 * **POST /item:** Add a new item.
 
   ```json
   {
-  "name": "Item Name",
-  "unit": { "id": 1 },
-  "category": { "id": 1 }
+    "name": "Item Name",
+    "idCategory": 1,
+    "idUnit": 1
   }
-    ```
+  ```
 
 * **DELETE /item/{id}:** Delete an item by ID.
-* **PUT /item:** Update an item.
+* **PUT /item/{id}:** Update an item.
 
   ```json
   {
-  "id": 1,
-  "name": "Item Name",
-  "unit": { "id": 1 },
-  "category": { "id": 1 }
+    "name": "Updated Item Name",
+    "idCategory": 1,
+    "idUnit": 1
   }
-    ```
+  ```
+
+### Users (/users)
+
+* **GET /users/users:** Get all registered users.
+* **GET /users/userDetailsService/{id}:** Get user details by ID.
 
 ## Testing
-
 To run the unit tests:
 
 ```bash
