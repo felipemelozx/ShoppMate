@@ -391,13 +391,9 @@ ShoppMate API adopts a domain-driven architecture, where the code is organized a
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Make your changes and commit them.
-4.  Push your changes to your fork.
-5.  Submit a pull request.
+Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines on how to report bugs, suggest enhancements, and submit pull requests.
 
 ## License
 
