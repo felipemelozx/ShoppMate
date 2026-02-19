@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ShoppingListService } from '../../../shared/services/shopping-list.service';
 import { ShoppingListResponseDTO } from '../../../shared/interfaces/shopping-list.interface';
 import { ShoppingListDialogComponent } from '../shopping-list-dialog/shopping-list-dialog.component';
+import { ListShareDialogComponent } from '../list-share-dialog/list-share-dialog.component';
 
 @Component({
   selector: 'app-shopping-list',
@@ -20,10 +21,11 @@ import { ShoppingListDialogComponent } from '../shopping-list-dialog/shopping-li
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './shopping-list.component.html',
-  styleUrls: ['./shopping-list.component.scss']
+  styleUrls: ['./shopping-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingListComponent implements OnInit {
   shoppingLists: ShoppingListResponseDTO[] = [];
@@ -33,7 +35,7 @@ export class ShoppingListComponent implements OnInit {
     private shoppingListService: ShoppingListService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadLists();
@@ -46,20 +48,22 @@ export class ShoppingListComponent implements OnInit {
         this.shoppingLists = lists;
         this.isLoading = false;
       },
-      error: (error) => {
-        this.snackBar.open('Erro ao carregar listas', 'Fechar', { duration: 3000 });
+      error: () => {
+        this.snackBar.open('Erro ao carregar listas', 'Fechar', {
+          duration: 3000,
+        });
         this.isLoading = false;
-      }
+      },
     });
   }
 
   openEditDialog(list: ShoppingListResponseDTO): void {
     const dialogRef = this.dialog.open(ShoppingListDialogComponent, {
       width: '400px',
-      data: { list, isEdit: true }
+      data: { list, isEdit: true },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadLists();
       }
@@ -69,10 +73,10 @@ export class ShoppingListComponent implements OnInit {
   openNewListDialog(): void {
     const dialogRef = this.dialog.open(ShoppingListDialogComponent, {
       width: '400px',
-      data: { isEdit: false }
+      data: { isEdit: false },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadLists();
       }
@@ -83,13 +87,24 @@ export class ShoppingListComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir esta lista?')) {
       this.shoppingListService.deleteShoppingList(id).subscribe({
         next: () => {
-          this.snackBar.open('Lista excluída com sucesso', 'Fechar', { duration: 3000 });
+          this.snackBar.open('Lista excluída com sucesso', 'Fechar', {
+            duration: 3000,
+          });
           this.loadLists();
         },
-        error: (error) => {
-          this.snackBar.open('Erro ao excluir lista', 'Fechar', { duration: 3000 });
-        }
+        error: () => {
+          this.snackBar.open('Erro ao excluir lista', 'Fechar', {
+            duration: 3000,
+          });
+        },
       });
     }
+  }
+
+  openShareDialog(list: ShoppingListResponseDTO): void {
+    this.dialog.open(ListShareDialogComponent, {
+      width: '600px',
+      data: { listId: list.idList, listName: list.listName }
+    });
   }
 }

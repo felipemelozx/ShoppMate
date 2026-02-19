@@ -1,9 +1,12 @@
-import { ShoppingList, ShoppingListResponseDTO } from './shopping-list.interface';
+import {
+  ShoppingList,
+  ShoppingListResponseDTO,
+} from './shopping-list.interface';
 import { User, UserResponseDTO } from './user.interface';
 
 export enum Permission {
   READ = 'READ',
-  WRITE = 'WRITE'
+  WRITE = 'WRITE',
 }
 
 export interface ListPermission {
@@ -26,5 +29,12 @@ export interface ListPermissionResponseDTO {
   id: number;
   shoppingListResponseDTO: ShoppingListResponseDTO;
   userResponseDTO: UserResponseDTO;
+  permission: Permission;
+}
+
+export interface ListPermissionSummaryDTO {
+  id: number;
+  userFullName: string;
+  userEmail: string;
   permission: Permission;
 }
