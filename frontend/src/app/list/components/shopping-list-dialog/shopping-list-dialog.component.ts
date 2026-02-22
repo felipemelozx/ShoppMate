@@ -15,7 +15,6 @@ import {
   ShoppingListResponseDTO,
   ShoppingListRequestDTO,
 } from '../../../shared/interfaces/shopping-list.interface';
-import { AuthService } from '../../../shared/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogActions } from '@angular/material/dialog';
 import { MatDialogContent } from '@angular/material/dialog';
@@ -41,7 +40,6 @@ export class ShoppingListDialogComponent {
   private fb = inject(FormBuilder);
   private shoppingListService = inject(ShoppingListService);
   private snackBar = inject(MatSnackBar);
-  private authService = inject(AuthService);
   private data = inject(MAT_DIALOG_DATA) as {
     list?: ShoppingListResponseDTO;
     isEdit: boolean;
@@ -67,7 +65,6 @@ export class ShoppingListDialogComponent {
     if (this.listForm.valid) {
       const listData: ShoppingListRequestDTO = {
         name: this.listForm.value.name,
-        idUser: this.authService.getCurrentUserId(), // Get from auth service
       };
 
       if (this.isEdit && this.data.list) {

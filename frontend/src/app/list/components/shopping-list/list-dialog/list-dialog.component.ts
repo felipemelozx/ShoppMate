@@ -55,7 +55,6 @@ import { ShoppingListRequestDTO } from '../../../../shared/interfaces/shopping-l
 export class ListDialogComponent {
   list: ShoppingListRequestDTO = {
     name: '',
-    idUser: 0,
   };
 
   constructor(
