@@ -76,8 +76,7 @@ public class ListItemController {
     @Operation(summary = "Update a ListItem")
     @PutMapping("/{id}")
     public ResponseEntity<ListItemResponseDTO> updateListItem(@PathVariable Long id,
-            @Valid @RequestBody ListItemUpdateRequestDTO requestDTO,
-            @AuthenticationPrincipal User user) {
+            @Valid @RequestBody ListItemUpdateRequestDTO requestDTO, @AuthenticationPrincipal User user) {
 
         ListItem updatedListItem = service.editList(id, requestDTO, user);
 
