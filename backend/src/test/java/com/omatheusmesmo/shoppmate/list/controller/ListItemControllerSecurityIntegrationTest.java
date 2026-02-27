@@ -7,6 +7,7 @@ import com.omatheusmesmo.shoppmate.category.repository.CategoryRepository;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.item.repository.ItemRepository;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.mapper.ListMapper;
 import com.omatheusmesmo.shoppmate.unit.entity.Unit;
 import com.omatheusmesmo.shoppmate.unit.repository.UnitRepository;
@@ -263,7 +264,7 @@ class ListItemControllerSecurityIntegrationTest {
 
     @Test
     void testUserCannotEditAnotherUsersListItem() throws Exception {
-        ListItemRequestDTO maliciousUpdate = new ListItemRequestDTO(userBList.getId(), item.getId(), 99);
+        ListItemUpdateRequestDTO maliciousUpdate = new ListItemUpdateRequestDTO(userBList.getId(), item.getId(), 99, false);
 
         mockMvc.perform(put("/lists/" + userBList.getId() + "/items/" + userBListItem.getId()).with(csrf())
                 .header("Authorization", "Bearer " + tokenUserA).contentType(MediaType.APPLICATION_JSON)
@@ -276,7 +277,7 @@ class ListItemControllerSecurityIntegrationTest {
 
     @Test
     void testUserCanEditOwnListItem() throws Exception {
-        ListItemRequestDTO validUpdate = new ListItemRequestDTO(userAList.getId(), item.getId(), 10);
+        ListItemUpdateRequestDTO validUpdate = new ListItemUpdateRequestDTO(userAList.getId(), item.getId(), 10, true);
 
         mockMvc.perform(put("/lists/" + userAList.getId() + "/items/" + userAListItem.getId()).with(csrf())
                 .header("Authorization", "Bearer " + tokenUserA).contentType(MediaType.APPLICATION_JSON)
