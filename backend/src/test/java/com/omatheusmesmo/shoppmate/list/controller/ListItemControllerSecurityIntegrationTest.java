@@ -264,7 +264,8 @@ class ListItemControllerSecurityIntegrationTest {
 
     @Test
     void testUserCannotEditAnotherUsersListItem() throws Exception {
-        ListItemUpdateRequestDTO maliciousUpdate = new ListItemUpdateRequestDTO(userBList.getId(), item.getId(), 99, false);
+        ListItemUpdateRequestDTO maliciousUpdate = new ListItemUpdateRequestDTO(userBList.getId(), item.getId(), 99,
+                false);
 
         mockMvc.perform(put("/lists/" + userBList.getId() + "/items/" + userBListItem.getId()).with(csrf())
                 .header("Authorization", "Bearer " + tokenUserA).contentType(MediaType.APPLICATION_JSON)
