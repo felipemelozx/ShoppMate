@@ -1,4 +1,4 @@
-import { User } from './user.interface';
+import { User, UserResponseDTO } from './user.interface';
 
 export interface ShoppingList {
   id?: number;
@@ -11,12 +11,6 @@ export interface ShoppingList {
 
 export interface ShoppingListRequestDTO {
   name: string;
-}
-
-export interface UserResponseDTO {
-  id: number;
-  fullName: string;
-  email: string;
 }
 
 export interface ShoppingListResponseDTO {
